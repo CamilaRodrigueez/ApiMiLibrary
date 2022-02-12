@@ -40,7 +40,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpPost]
         [Route("InsertEditorial")]
-        //[CustomPermissionFilter(Enums.Permission.InsertarEditorial)]
+        [CustomPermissionFilter(Enums.Permission.InsertarEditorial)]
         public async Task<IActionResult> InsertEditorial(InsertEditorialDto dates)
         {
             IActionResult response;
@@ -70,7 +70,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpPut]
         [Route("UpdateEditorial")]
-        //[CustomPermissionFilter(Enums.Permission.ActualizarEditorial)]
+        [CustomPermissionFilter(Enums.Permission.ActualizarEditorial)]
         public async Task<IActionResult> UpdateEditorial(EditorialDto data)
         {
             IActionResult response;
@@ -100,7 +100,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpDelete]
         [Route("DeleteEditorial")]
-        //[CustomPermissionFilter(Enums.Permission.EliminarEditorial)]
+        [CustomPermissionFilter(Enums.Permission.EliminarEditorial)]
         public async Task<IActionResult> DeleteEditorial(int id)
         {
             IActionResult response;

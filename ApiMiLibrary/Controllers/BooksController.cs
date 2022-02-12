@@ -43,7 +43,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpGet]
         [Route("GetAllBooks")]
-        //[CustomPermissionFilter(Enums.Permission.ConsultarLibros)]
+        [CustomPermissionFilter(Enums.Permission.ConsultarLibros)]
         public IActionResult GetAllBooks()
         {
             List<ConsultBooksDto> list = _booksServices.GetAllBooks();
@@ -89,7 +89,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="200">OK! </response>
         /// <response code="400">Business Exception</response>
         /// <response code="500">Oops! Can't process your request now</response>
-        //[CustomPermissionFilter(Enums.Permission.ConsultarEdtadoLibro)]
+        [CustomPermissionFilter(Enums.Permission.ConsultarEdtadoLibro)]
         [HttpGet]
         [Route("GetAllTypeState")]
         public IActionResult GetAllTypeState()
@@ -111,7 +111,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="200">OK! </response>
         /// <response code="400">Business Exception</response>
         /// <response code="500">Oops! Can't process your request now</response>
-        //[CustomPermissionFilter(Enums.Permission.ConsultarEditoriales)]
+        [CustomPermissionFilter(Enums.Permission.ConsultarEditoriales)]
         [HttpGet]
         [Route("GetAllEditorial")]
         public IActionResult GetAllEditorial()
@@ -135,7 +135,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpPost]
         [Route("InsertBooks")]
-        //[CustomPermissionFilter(Enums.Permission.InsertarNuevoLibro)]
+        [CustomPermissionFilter(Enums.Permission.InsertarNuevoLibro)]
         public async Task<IActionResult> InsertBooks(InsertBooksDto dates)
         {
             IActionResult response;
@@ -165,7 +165,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpPut]
         [Route("UpdateBooks")]
-        //[CustomPermissionFilter(Enums.Permission.ActualizarDatosLibro)]
+        [CustomPermissionFilter(Enums.Permission.ActualizarDatosLibro)]
         public async Task<IActionResult> UpdateBooks(BooksDto data)
         {
             IActionResult response;
@@ -195,7 +195,7 @@ namespace ApiMiLibrary.Controllers
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpDelete]
         [Route("DeleteBooks")]
-        //[CustomPermissionFilter(Enums.Permission.EliminarLibro)]
+        [CustomPermissionFilter(Enums.Permission.EliminarLibro)]
         public async Task<IActionResult> DeleteBooks(int idbook)
         {
             IActionResult response;
