@@ -73,8 +73,6 @@ namespace MyLibrary.Domain.Services
         }
 
         public List<TypeStateEntity> GetAllTypeState() => _unitOfWork.TypeStateRepository.GetAll().ToList();
-        public List<EditorialEntity> GetAllEditorial() => _unitOfWork.EditorialRepository.GetAll().ToList();
-
         public async Task<bool> InsertBooksAsync(InsertBooksDto data)
         {
             BooksEntity dates = new BooksEntity()

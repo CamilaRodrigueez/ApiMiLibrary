@@ -1,6 +1,7 @@
 ﻿using ApiMiLibrary.Handlers;
 using Common.Utils.Enums;
 using Common.Utils.Resorces;
+using Infraestructure.Entity.Models.Library;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,28 @@ namespace ApiMiLibrary.Controllers
         #endregion
 
         #region Methods
-      
+        /// <summary>
+        /// Obtener Listado de Editoriales 
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">OK! </response>
+        /// <response code="400">Business Exception</response>
+        /// <response code="500">Oops! Can't process your request now</response>
+        [CustomPermissionFilter(Enums.Permission.ConsultarEditoriales)]
+        [HttpGet]
+        [Route("GetAllEditorial")]
+        public IActionResult GetAllEditorial()
+        {
+            List<EditorialEntity> result = _editorialServices.GetAllEditorial();
+            ResponseDto response = new ResponseDto()
+            {
+                IsSuccess = true,
+                Result = result,
+                Message = string.Empty
+            };
+            return Ok(response);
+        }
+
         /// <summary>
         /// Insertar nuevo Editorial
         /// </summary>
