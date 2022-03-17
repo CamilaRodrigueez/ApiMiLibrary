@@ -24,13 +24,15 @@ namespace Infraestructure.Core.Data
 
         public DbSet<BooksEntity> BocksEntity { get; set; }
         public DbSet<EditorialEntity> EditorialEntity { get; set; }
+        public DbSet<AuthorsEntity> AuthorsEntity { get; set; }
+        public DbSet<AuthorbooksEntity> AuthorbooksEntity { get; set; }
 
 
-    
+
         public DbSet<TypeStateEntity> TypeStateEntity { get; set; }
 
 
-       
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

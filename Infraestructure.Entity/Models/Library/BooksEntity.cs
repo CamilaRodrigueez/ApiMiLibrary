@@ -15,15 +15,20 @@ namespace Infraestructure.Entity.Models.Library
         public int Id { get; set; }
 
         [MaxLength(100)]
-        public string Name  { get; set; }
+        public string Title { get; set; }
 
         [MaxLength(100)]
         public string Gender { get; set; }
+        public string Synopsis { get; set; }
+
+        public int Pages { get; set; }
 
         [ForeignKey("EditorialEntity")]
         public int IdEditorial { get; set; }
 
         public EditorialEntity EditorialEntity { get; set; }
+
+        public AuthorbooksEntity AuthorbooksEntity { get; set; }
 
         [ForeignKey("TypeStateEntity")]
         public int IdTypeState { get; set; }

@@ -17,10 +17,13 @@ namespace Common.Utils.Enums
         }
         public enum TypePermission
         {
-            Usuarios = 1,
+            Usuario = 1,
             Roles = 2,
             Permisos = 3,
-            Biblioteca = 4,
+            Libros = 4,
+            Editoriales = 5,
+            Autores = 6,
+            Estados=7
         }
         public enum Permission
         {
@@ -39,25 +42,33 @@ namespace Common.Utils.Enums
             ConsultarPermisos = 8,
             DenegarPermisos = 9,
 
+            //Estados
+            ConsultarEstados = 10,
+            ActualizarEstados = 11,
 
-            //Biblioteca
-            InsertarNuevoLibro = 10,
-            ActualizarDatosLibro = 11,
-            EliminarLibro = 12,
-            ConsultarLibros = 13,
-            BuscarLibro = 14,
-            ActualizarEditorial= 15,
-            InsertarEditorial=16,
-            EliminarEditorial=17,
-            ConsultarEditoriales=18,
-            ConsultarEdtadoLibro=19,
+            //Libros
+            CrearLibros = 12,
+            ActualizarLibros = 13,
+            EliminarLibros = 14,
+            ConsultarLibros = 15,
 
+            //Editorial
+            CrearEditoriales = 16,
+            ActualizarEditoriales = 17,
+            EliminarEditoriales = 18,
+            ConsultarEditoriales = 19,
+
+            //Autores
+            CrearAutores = 20,
+            ActualizarAutores = 21,
+            EliminarAutores = 22,
+            ConsultarAutores = 23
         }
+
         public enum RolUser
         {
             Administrador = 1,
-            Bibliotecario = 2,
-            Estandar = 3
+            Estandar = 2
         }
     }
 }

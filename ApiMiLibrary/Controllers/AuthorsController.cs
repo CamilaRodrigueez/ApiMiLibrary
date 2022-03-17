@@ -1,19 +1,15 @@
 ﻿using ApiMiLibrary.Handlers;
 using Common.Utils.Enums;
 using Common.Utils.Resorces;
-using Common.Utils.Utils;
 using Infraestructure.Entity.Models.Library;
-using Infraestructure.Entity.Models.Master;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MiLibrary.Domain.Dto.Authors;
+using MiLibrary.Domain.Services.Interface;
 using MyLibrary.Domain.Dto;
-using MyLibrary.Domain.Dto.Books;
-using MyLibrary.Domain.Services.Interface;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static Common.Utils.Constant.Const;
 
 namespace ApiMiLibrary.Controllers
 {
@@ -21,107 +17,57 @@ namespace ApiMiLibrary.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [TypeFilter(typeof(CustomExceptionHandler))]
-    public class BooksController : ControllerBase
+    public class AuthorsController : ControllerBase
     {
         #region Attributes
-        private readonly IBooksServices _booksServices;
+        private readonly IAuthorsServices _authorsServices;
         #endregion
+
         #region Builder
-        public BooksController(IBooksServices booksServices)
+        public AuthorsController(IAuthorsServices authorsServices)
         {
-            _booksServices = booksServices;
+            _authorsServices = authorsServices;
         }
         #endregion
-
         #region Methods
-
         /// <summary>
-        /// Obtiene todos los libros de la Biblioteca
+        /// Obtener Listado de Autores
         /// </summary>
         /// <returns></returns>
         /// <response code="200">OK! </response>
         /// <response code="400">Business Exception</response>
         /// <response code="500">Oops! Can't process your request now</response>
+        [CustomPermissionFilter(Enums.Permission.ConsultarAutores)]
         [HttpGet]
-        [Route("GetAllBooks")]
-        [CustomPermissionFilter(Enums.Permission.ConsultarLibros)]
-        public IActionResult GetAllBooks()
+        [Route("GetAllAuthors")]
+        public IActionResult GetAllAuthors()
         {
-            List<ConsultBooksDto> list = _booksServices.GetAllBooks(); ResponseDto response = new ResponseDto()
+            List<ConsultAuthorsDto> list = _authorsServices.GetAllAuthors();
+            ResponseDto response = new ResponseDto()
             {
                 IsSuccess = true,
                 Result = list,
                 Message = string.Empty
             };
-            return Ok(response);
-        }
-
-
-
-
-        /// <summary>
-        /// Obtener un libro
-        /// </summary>
-        /// <returns></returns>
-        /// <response code="200">OK! </response>
-        /// <response code="400">Business Exception</response>
-        /// <response code="500">Oops! Can't process your request now</response>
-        [HttpGet]
-        [Route("GetBook")]
-        [CustomPermissionFilter(Enums.Permission.ConsultarLibros)]
-        public IActionResult GetBook(int idBook)
-        {
-            ConsultBooksDto result = _booksServices.GetBook(idBook);
-            ResponseDto response = new ResponseDto()
-            {
-                IsSuccess = true,
-                Result = result,
-                Message = string.Empty
-            };
 
             return Ok(response);
         }
 
-
         /// <summary>
-        /// Obtener listado de Estados de los Libros.
-        /// </summary>
-        /// <returns></returns>
-        /// <response code="200">OK! </response>
-        /// <response code="400">Business Exception</response>
-        /// <response code="500">Oops! Can't process your request now</response>
-        [CustomPermissionFilter(Enums.Permission.ConsultarEstados)]
-        [HttpGet]
-        [Route("GetAllTypeState")]
-        public IActionResult GetAllTypeState()
-        {
-            List<TypeStateDto> result = _booksServices.GetAllTypeState();
-            ResponseDto response = new ResponseDto()
-            {
-                IsSuccess = true,
-                Result = result,
-                Message = string.Empty
-            };
-            return Ok(response);
-        }
-
-
-
-        /// <summary>
-        /// Insertar nuevo libro 
+        /// Insertar nuevo Autor
         /// </summary>
         /// <returns></returns>
         /// <response code="200">OK! </response>
         /// <response code="400">Business Exception</response>
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpPost]
-        [Route("InsertBooks")]
-        [CustomPermissionFilter(Enums.Permission.CrearLibros)]
-        public async Task<IActionResult> InsertBooks(InsertBooksDto dates)
+        [Route("InsertAuthor")]
+        [CustomPermissionFilter(Enums.Permission.CrearAutores)]
+        public async Task<IActionResult> InsertAuthor(InsertAuthorsDto dates)
         {
             IActionResult response;
 
-            bool result = await _booksServices.InsertBooksAsync(dates);
+            bool result = await _authorsServices.InsertAuthorAsync(dates);
             ResponseDto responseDto = new ResponseDto()
             {
                 IsSuccess = result,
@@ -138,20 +84,20 @@ namespace ApiMiLibrary.Controllers
         }
 
         /// <summary>
-        /// Actualizar Datos de Un Libro 
+        /// Actualizar Datos de un Autor
         /// </summary>
         /// <returns></returns>
         /// <response code="200">OK! </response>
         /// <response code="400">Business Exception</response>
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpPut]
-        [Route("UpdateBooks")]
-        [CustomPermissionFilter(Enums.Permission.ActualizarLibros)]
-        public async Task<IActionResult> UpdateBooks(BooksDto data)
+        [Route("UpdateAuthor")]
+        [CustomPermissionFilter(Enums.Permission.ActualizarAutores)]
+        public async Task<IActionResult> UpdateAuthor(AuthorsDto data)
         {
             IActionResult response;
 
-            bool result = await _booksServices.UpdateBooksAsync(data);
+            bool result = await _authorsServices.UpdateAuthorAsync(data);
             ResponseDto responseDto = new ResponseDto()
             {
                 IsSuccess = result,
@@ -168,19 +114,19 @@ namespace ApiMiLibrary.Controllers
         }
 
         /// <summary>
-        /// Eliminar un Libro 
+        /// Eliminar un Autor
         /// </summary>
         /// <returns></returns>
         /// <response code="200">OK! </response>
         /// <response code="400">Business Exception</response>
         /// <response code="500">Oops! Can't process your request now</response>
         [HttpDelete]
-        [Route("DeleteBooks")]
-        [CustomPermissionFilter(Enums.Permission.EliminarLibros)]
-        public async Task<IActionResult> DeleteBooks(int id)
+        [Route("DeleteAuthor")]
+        [CustomPermissionFilter(Enums.Permission.EliminarAutores)]
+        public async Task<IActionResult> DeleteAuthor(int id)
         {
             IActionResult response;
-            ResponseDto result = await _booksServices.DeleteBooksAsync(id);
+            ResponseDto result = await _authorsServices.DeleteAuthorAsync(id);
 
             if (result.IsSuccess)
                 response = Ok(result);
@@ -189,9 +135,6 @@ namespace ApiMiLibrary.Controllers
 
             return response;
         }
-
-
-
         #endregion
     }
 }

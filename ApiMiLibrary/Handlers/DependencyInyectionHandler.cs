@@ -31,6 +31,7 @@ namespace ApiMiLibrary.Handlers
             services.AddTransient<IPermissionServices, PermissionServices>();
             services.AddTransient<IBooksServices, BooksServices>();
             services.AddTransient<IEditorialServices, EditorialServices>();
+            services.AddTransient<IAuthorsServices, AuthorsServices>();
           
 
         }

@@ -10,7 +10,7 @@ namespace MiLibrary.Domain.Services.Interface
 {
     public interface IEditorialServices
     {
-        List<EditorialEntity> GetAllEditorial();
+        List<EditorialDto> GetAllEditorial();
         Task<bool> InsertEditorialAsync(InsertEditorialDto data);
         Task<bool> UpdateEditorialAsync(EditorialDto data);
         Task<ResponseDto> DeleteEditorialAsync(int id);

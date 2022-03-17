@@ -25,7 +25,23 @@ namespace MiLibrary.Domain.Services
         #endregion
 
         #region Methods
-        public List<EditorialEntity> GetAllEditorial() => _unitOfWork.EditorialRepository.GetAll().ToList();
+        public List<EditorialDto> GetAllEditorial()
+        {
+            var books = _unitOfWork.EditorialRepository.GetAll();
+                                                        
+                                                      
+
+
+            List<EditorialDto> list = books.Select(x => new EditorialDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Direction = x.Direction,
+
+            }).ToList();
+
+            return list;
+        }
         public async Task<bool> InsertEditorialAsync(InsertEditorialDto data)
         {
             EditorialEntity dates = new EditorialEntity()

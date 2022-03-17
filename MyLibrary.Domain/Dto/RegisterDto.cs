@@ -1,14 +1,14 @@
-﻿using System;
+﻿using MyLibrary.Domain.Dto;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace MyLibrary.Domain.Dto
+namespace MiLibrary.Domain.Dto
 {
-    public class UserDto : LoginDto
+    public class RegisterDto:LoginDto
     {
-        [Key]
-        public int IdUser { get; set; }
+
 
         [Required(ErrorMessage = "El nombre es requerido")]
 
@@ -21,9 +21,6 @@ namespace MyLibrary.Domain.Dto
         [MaxLength(100)]
         [Display(Name = "Apellido")]
         public string LastName { get; set; }
-
-        public int IdRol { get; set; }
-        public string NameRol { get; set; }
         [DataType(DataType.Password)]
         [Display(Name = "Confirmar Contraseña")]
         [Compare("Password", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]

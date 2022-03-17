@@ -17,8 +17,8 @@ namespace ApiMiLibrary.Handlers
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Api My Library",
-                    Description = "Api de My Library",
+                    Title = "Api My LibraryNeoris",
+                    Description = "Api de My LibraryNeoris",
                     Contact = new OpenApiContact
                     {
                         Name = "Camila Rodriguez",

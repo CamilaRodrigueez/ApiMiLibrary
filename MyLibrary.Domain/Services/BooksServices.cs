@@ -28,24 +28,28 @@ namespace MyLibrary.Domain.Services
         #region Methods
         public List<ConsultBooksDto> GetAllBooks()
         {
-            var books = _unitOfWork.BooksRepository.GetAll(p => p.TypeStateEntity,
-                                                        p => p.EditorialEntity
+            var books = _unitOfWork.BooksRepository.GetAll(p => p.AuthorbooksEntity.AuthorsEntity,
+                                                        p => p.EditorialEntity,
+                                                        p => p.TypeStateEntity
                                                         ).ToList();
 
+            
             List<ConsultBooksDto> list = books.Select(x => new ConsultBooksDto
             {
                 Id = x.Id,
-                Name = x.Name,
+                Title = x.Title,
                 Gender = x.Gender,
-                IdEditorial = x.IdEditorial,
-                IdTypeState = x.IdTypeState,
+                Pages = x.Pages,
+                Synopsis = x.Synopsis,
                 Editorial = x.EditorialEntity.Name,
                 TypeState = x.TypeStateEntity.TypeState,
                 Direction = x.EditorialEntity.Direction,
+                NameAuthor=x.AuthorbooksEntity.AuthorsEntity.Name,
+                IdEditorial = x.IdEditorial,
+                IdAuthor = x.AuthorbooksEntity.IdAuthor,
+                IdTypeState = x.IdTypeState,
 
             }).ToList();
-
-
 
             return list;
         }
@@ -53,64 +57,93 @@ namespace MyLibrary.Domain.Services
         public ConsultBooksDto GetBook(int idBook)
         {
             var books = _unitOfWork.BooksRepository.First(x => x.Id == idBook,
-                                                        p => p.TypeStateEntity,
-                                                        p => p.EditorialEntity);
+                                                        p => p.AuthorbooksEntity.AuthorsEntity,
+                                                        p => p.EditorialEntity,
+                                                        p => p.TypeStateEntity);
 
 
             ConsultBooksDto booksDto = new ConsultBooksDto()
             {
                 Id = books.Id,
-                Name = books.Name,
+                Title = books.Title,
                 Gender = books.Gender,
-                IdEditorial = books.IdEditorial,
-                IdTypeState = books.IdTypeState,
+                Pages= books.Pages,
+                Synopsis = books.Synopsis,
                 Editorial = books.EditorialEntity.Name,
-                TypeState = books.TypeStateEntity.TypeState,
                 Direction = books.EditorialEntity.Direction,
+                TypeState = books.TypeStateEntity.TypeState,
+                NameAuthor = books.AuthorbooksEntity.AuthorsEntity.Name,
+                IdEditorial=books.IdEditorial,
+                IdAuthor=books.AuthorbooksEntity.IdAuthor,
+                IdTypeState=books.IdTypeState,
             };
 
             return booksDto;
         }
 
-        public List<TypeStateEntity> GetAllTypeState() => _unitOfWork.TypeStateRepository.GetAll().ToList();
+        public List<TypeStateDto> GetAllTypeState()
+        {
+            var typeState = _unitOfWork.TypeStateRepository.GetAll();
+
+            List<TypeStateDto> list = typeState.Select(x => new TypeStateDto
+            { 
+                IdTypeState=x.IdTypeState,
+                TypeState=x.TypeState,
+
+            }).ToList();
+
+            return list;
+        }
         public async Task<bool> InsertBooksAsync(InsertBooksDto data)
         {
-            BooksEntity dates = new BooksEntity()
+            AuthorbooksEntity authorbooksEntity = new AuthorbooksEntity()
             {
+                IdAuthor = data.IdAuthor,
+                BooksEntity = new BooksEntity()
+                {
 
-                Name = data.Name,
-                Gender = data.Gender,
-                IdEditorial = data.IdEditorial,
-                IdTypeState = data.IdTypeState,
+                    Title = data.Title,
+                    Gender = data.Gender,
+                    Pages = data.Pages,
+                    Synopsis=data.Synopsis,
+                    IdEditorial = data.IdEditorial,
+                    IdTypeState = data.IdTypeState,
+                }
             };
 
-            _unitOfWork.BooksRepository.Insert(dates);
+            _unitOfWork.AuthorbooksRepository.Insert(authorbooksEntity);
             return await _unitOfWork.Save() > 0;
         }
         public async Task<bool> UpdateBooksAsync(BooksDto data)
         {
             bool result = false;
 
-            BooksEntity booksEntity = _unitOfWork.BooksRepository.FirstOrDefault(x => x.Id == data.Id);
-            if (booksEntity != null)
+            BooksEntity books = _unitOfWork.BooksRepository.FirstOrDefault(x => x.Id == data.Id,
+                                                                             x => x.AuthorbooksEntity);
+                                                                                  
+            if (books != null)
             {
-                booksEntity.Name = data.Name;
-                booksEntity.Gender = data.Gender;
-                booksEntity.IdEditorial = data.IdEditorial;
-                booksEntity.IdTypeState = data.IdTypeState;
+                books.AuthorbooksEntity.IdAuthor = data.IdAuthor;
+                books.Title = data.Title;
+                books.Gender = data.Gender;
+                books.Pages = data.Pages;
+                books.Synopsis = data.Synopsis;
+                books.IdEditorial = data.IdEditorial;
+                books.IdTypeState = data.IdTypeState;
+               
 
 
-                _unitOfWork.BooksRepository.Update(booksEntity);
+                _unitOfWork.BooksRepository.Update(books);
                 result = await _unitOfWork.Save() > 0;
             }
 
             return result;
         }
-        public async Task<ResponseDto> DeleteBooksAsync(int idbook)
+        public async Task<ResponseDto> DeleteBooksAsync(int id)
         {
             ResponseDto response = new ResponseDto();
 
-            _unitOfWork.BooksRepository.Delete(idbook);
+            _unitOfWork.BooksRepository.Delete(id);
             response.IsSuccess = await _unitOfWork.Save() > 0;
             if (response.IsSuccess)
                 response.Message = "Se elminnó correctamente El libro";

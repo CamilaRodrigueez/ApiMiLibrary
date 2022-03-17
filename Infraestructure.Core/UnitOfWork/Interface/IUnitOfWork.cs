@@ -27,6 +27,8 @@ namespace Infraestructure.Core.UnitOfWork.Interface
 
         IRepository<BooksEntity> BooksRepository { get; }
         IRepository<EditorialEntity> EditorialRepository { get; }
+        IRepository<AuthorsEntity> AuthorsRepository { get; }
+        IRepository<AuthorbooksEntity> AuthorbooksRepository { get; }
 
 
 

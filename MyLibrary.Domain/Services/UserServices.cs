@@ -5,6 +5,7 @@ using Infraestructure.Core.UnitOfWork.Interface;
 using Infraestructure.Entity.Models.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MiLibrary.Domain.Dto;
 using MyLibrary.Domain.Dto;
 using MyLibrary.Domain.Services.Interface;
 using System;
@@ -85,64 +86,30 @@ namespace MyLibrary.Domain.Services
         }
         #endregion
         #region Methods Crud
-        public List<UserEntity> GetAll()
+
+
+        public List<UserDto> GetAllUsers()
         {
-            return _unitOfWork.UserRepository.GetAll().ToList();
+            var users = _unitOfWork.RolUserRepository.GetAll(p => p.RolEntity, x => x.UserEntity);
+                                                            
+            List<UserDto> list = users.Select(x => new UserDto
+            {  IdRol = x.RolEntity.IdRol,
+               IdUser = x.UserEntity.IdUser,
+               Name = x.UserEntity.Name,
+               LastName = x.UserEntity.LastName,
+               UserName = x.UserEntity.Email,
+               NameRol = x.RolEntity.Rol,
+               Password = "No disponible",
+               ConfirmPassword ="No disponible"
+                
+            }).ToList();
+
+
+
+            return list;
         }
 
-        public UserEntity GetUser(int idUser)
-        {
-            return _unitOfWork.UserRepository.FirstOrDefault(x => x.IdUser == idUser);
-        }
-
-        public async Task<bool> UpdateUser(UserEntity user)
-        {
-            UserEntity _user = GetUser(user.IdUser);
-
-            _user.Name = user.Name;
-            _user.LastName = user.LastName;
-            _unitOfWork.UserRepository.Update(_user);
-
-            return await _unitOfWork.Save() > 0;
-
-        }
-        public async Task<bool> DeleteUser(int idUser)
-        {
-            _unitOfWork.UserRepository.Delete(idUser);
-
-            return await _unitOfWork.Save() > 0;
-        }
-
-        public async Task<ResponseDto> CreateUser(UserEntity data)
-        {
-            ResponseDto result = new ResponseDto();
-
-            if (Utils.ValidateEmail(data.Email))
-            {
-                if (_unitOfWork.UserRepository.FirstOrDefault(x => x.Email == data.Email) == null)
-                {
-                    int idRol = data.IdUser;
-                    data.Password = "123456";
-                    data.IdUser = 0;
-
-                    RolUserEntity rolUser = new RolUserEntity()
-                    {
-                        IdRol = idRol,
-                        UserEntity = data
-                    };
-
-                    _unitOfWork.RolUserRepository.Insert(rolUser);
-                    result.IsSuccess = await _unitOfWork.Save() > 0;
-                }
-                else
-                    result.Message = "Email ya se encuestra registrado, utilizar otro!";
-            }
-            else
-                result.Message = "Usuario  con Email Inválido";
-
-            return result;
-        }//Pendiente para eliminar
-        public async Task<ResponseDto> Register(UserDto data)
+        public async Task<ResponseDto> Register(RegisterDto data)
         {
             ResponseDto result = new ResponseDto();
 

@@ -1,4 +1,5 @@
 ﻿using Infraestructure.Entity.Models.Security;
+using MiLibrary.Domain.Dto;
 using MyLibrary.Domain.Dto;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,11 @@ namespace MyLibrary.Domain.Services.Interface
     {
         #region Auth
         TokenDto Login(LoginDto login);
-        Task<ResponseDto> Register(UserDto data);
+        Task<ResponseDto> Register(RegisterDto data);
         #endregion
         #region Methods Crud
-        List<UserEntity> GetAll();
-        UserEntity GetUser(int idUser);
-
-        Task<bool> UpdateUser(UserEntity user);
-        Task<bool> DeleteUser(int idUser);
-        Task<ResponseDto> CreateUser(UserEntity data);
+        List<UserDto> GetAllUsers();
+        
         #endregion
     }
 }

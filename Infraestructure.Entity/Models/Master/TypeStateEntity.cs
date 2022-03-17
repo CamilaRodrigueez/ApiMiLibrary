@@ -7,7 +7,6 @@ using System.Text;
 namespace Infraestructure.Entity.Models.Master
 {
     [Table("TypeState", Schema = "Master")]
-
     public class TypeStateEntity
     {
         [Key]

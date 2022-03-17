@@ -7,12 +7,10 @@ namespace MyLibrary.Domain.Dto
 {
     public class TypeStateDto
     {
-        public class TypeStateEntity
-        {
             public int IdTypeState { get; set; }
 
             [MaxLength(100)]
             public string TypeState { get; set; }
-        }
+        
     }
 }

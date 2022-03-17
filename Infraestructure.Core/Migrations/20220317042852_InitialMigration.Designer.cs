@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Core.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220211223945_InitialMigration")]
+    [Migration("20220317042852_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,6 +19,49 @@ namespace Infraestructure.Core.Migrations
                 .HasAnnotation("ProductVersion", "3.1.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Infraestructure.Entity.Models.Library.AuthorbooksEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdAuthor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdBooks")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdAuthor");
+
+                    b.HasIndex("IdBooks")
+                        .IsUnique();
+
+                    b.ToTable("AuthorsBooks","Library");
+                });
+
+            modelBuilder.Entity("Infraestructure.Entity.Models.Library.AuthorsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authors","Library");
+                });
 
             modelBuilder.Entity("Infraestructure.Entity.Models.Library.BooksEntity", b =>
                 {
@@ -37,7 +80,13 @@ namespace Infraestructure.Core.Migrations
                     b.Property<int>("IdTypeState")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<int>("Pages")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Synopsis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
@@ -211,6 +260,21 @@ namespace Infraestructure.Core.Migrations
                         .IsUnique();
 
                     b.ToTable("User","Security");
+                });
+
+            modelBuilder.Entity("Infraestructure.Entity.Models.Library.AuthorbooksEntity", b =>
+                {
+                    b.HasOne("Infraestructure.Entity.Models.Library.AuthorsEntity", "AuthorsEntity")
+                        .WithMany()
+                        .HasForeignKey("IdAuthor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infraestructure.Entity.Models.Library.BooksEntity", "BooksEntity")
+                        .WithOne("AuthorbooksEntity")
+                        .HasForeignKey("Infraestructure.Entity.Models.Library.AuthorbooksEntity", "IdBooks")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Infraestructure.Entity.Models.Library.BooksEntity", b =>

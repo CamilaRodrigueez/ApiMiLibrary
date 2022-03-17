@@ -16,6 +16,21 @@ namespace Infraestructure.Core.Migrations
                 name: "Security");
 
             migrationBuilder.CreateTable(
+                name: "Authors",
+                schema: "Library",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Editorial",
                 schema: "Library",
                 columns: table => new
@@ -93,8 +108,10 @@ namespace Infraestructure.Core.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 100, nullable: true),
+                    Title = table.Column<string>(maxLength: 100, nullable: true),
                     Gender = table.Column<string>(maxLength: 100, nullable: true),
+                    Synopsis = table.Column<string>(nullable: true),
+                    Pages = table.Column<int>(nullable: false),
                     IdEditorial = table.Column<int>(nullable: false),
                     IdTypeState = table.Column<int>(nullable: false)
                 },
@@ -169,6 +186,35 @@ namespace Infraestructure.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AuthorsBooks",
+                schema: "Library",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdAuthor = table.Column<int>(nullable: false),
+                    IdBooks = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorsBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AuthorsBooks_Authors_IdAuthor",
+                        column: x => x.IdAuthor,
+                        principalSchema: "Library",
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AuthorsBooks_Bocks_IdBooks",
+                        column: x => x.IdBooks,
+                        principalSchema: "Library",
+                        principalTable: "Bocks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RolesPermission",
                 schema: "Security",
                 columns: table => new
@@ -196,6 +242,19 @@ namespace Infraestructure.Core.Migrations
                         principalColumn: "IdRol",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuthorsBooks_IdAuthor",
+                schema: "Library",
+                table: "AuthorsBooks",
+                column: "IdAuthor");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuthorsBooks_IdBooks",
+                schema: "Library",
+                table: "AuthorsBooks",
+                column: "IdBooks",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bocks_IdEditorial",
@@ -250,7 +309,7 @@ namespace Infraestructure.Core.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Bocks",
+                name: "AuthorsBooks",
                 schema: "Library");
 
             migrationBuilder.DropTable(
@@ -262,12 +321,12 @@ namespace Infraestructure.Core.Migrations
                 schema: "Security");
 
             migrationBuilder.DropTable(
-                name: "Editorial",
+                name: "Authors",
                 schema: "Library");
 
             migrationBuilder.DropTable(
-                name: "TypeState",
-                schema: "Master");
+                name: "Bocks",
+                schema: "Library");
 
             migrationBuilder.DropTable(
                 name: "Permission",
@@ -280,6 +339,14 @@ namespace Infraestructure.Core.Migrations
             migrationBuilder.DropTable(
                 name: "User",
                 schema: "Security");
+
+            migrationBuilder.DropTable(
+                name: "Editorial",
+                schema: "Library");
+
+            migrationBuilder.DropTable(
+                name: "TypeState",
+                schema: "Master");
 
             migrationBuilder.DropTable(
                 name: "TypePermission",

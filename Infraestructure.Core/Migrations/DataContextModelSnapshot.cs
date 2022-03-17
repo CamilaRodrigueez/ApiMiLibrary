@@ -18,6 +18,49 @@ namespace Infraestructure.Core.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Infraestructure.Entity.Models.Library.AuthorbooksEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdAuthor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdBooks")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdAuthor");
+
+                    b.HasIndex("IdBooks")
+                        .IsUnique();
+
+                    b.ToTable("AuthorsBooks","Library");
+                });
+
+            modelBuilder.Entity("Infraestructure.Entity.Models.Library.AuthorsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authors","Library");
+                });
+
             modelBuilder.Entity("Infraestructure.Entity.Models.Library.BooksEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -35,7 +78,13 @@ namespace Infraestructure.Core.Migrations
                     b.Property<int>("IdTypeState")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<int>("Pages")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Synopsis")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
@@ -209,6 +258,21 @@ namespace Infraestructure.Core.Migrations
                         .IsUnique();
 
                     b.ToTable("User","Security");
+                });
+
+            modelBuilder.Entity("Infraestructure.Entity.Models.Library.AuthorbooksEntity", b =>
+                {
+                    b.HasOne("Infraestructure.Entity.Models.Library.AuthorsEntity", "AuthorsEntity")
+                        .WithMany()
+                        .HasForeignKey("IdAuthor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infraestructure.Entity.Models.Library.BooksEntity", "BooksEntity")
+                        .WithOne("AuthorbooksEntity")
+                        .HasForeignKey("Infraestructure.Entity.Models.Library.AuthorbooksEntity", "IdBooks")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Infraestructure.Entity.Models.Library.BooksEntity", b =>

@@ -13,7 +13,7 @@ namespace MyLibrary.Domain.Services.Interface
     {
         List<ConsultBooksDto> GetAllBooks();
         ConsultBooksDto GetBook(int idBook);
-        List<TypeStateEntity> GetAllTypeState();
+        List<TypeStateDto> GetAllTypeState();
         Task<bool> InsertBooksAsync(InsertBooksDto data);
         Task<bool> UpdateBooksAsync(BooksDto data);
         Task<ResponseDto> DeleteBooksAsync(int idbook);
